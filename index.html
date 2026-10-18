@@ -134,6 +134,35 @@
     font-weight: 600;
   }
 
+  /* ---------- Scope tabs ---------- */
+
+  .scope-tabs {
+    display: flex;
+    gap: 26px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 24px;
+  }
+
+  .scope-tabs button {
+    font-family: 'Spectral', Georgia, serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 9px 1px 11px;
+    margin-bottom: -1px;
+  }
+
+  .scope-tabs button:hover { color: var(--ink); }
+
+  .scope-tabs button[aria-selected="true"] {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
   /* ---------- Controls ---------- */
 
   .controls {
@@ -1050,9 +1079,14 @@
       <span id="weekSummary"></span>
     </div>
     <p class="how-to">
-      <strong>Cards</strong> flip one at a time. <strong>List</strong> shows everything at once, grouped by book and class. <strong>Quiz</strong> tests you &mdash; pick what to study below and grade your own typed answers.
+      <strong>Class Notes</strong> and <strong>Midterm Review</strong> are separate tabs, each with their own Cards / List / Quiz. <strong>Cards</strong> flip one at a time. <strong>List</strong> shows everything at once, grouped by book or section. <strong>Quiz</strong> tests you &mdash; pick what to study below and grade your own typed answers.
     </p>
   </header>
+
+  <nav class="scope-tabs" role="tablist" aria-label="Study set">
+    <button type="button" id="scopeClassBtn" role="tab" aria-selected="true">Class Notes</button>
+    <button type="button" id="scopeMidtermBtn" role="tab" aria-selected="false">Midterm Review</button>
+  </nav>
 
   <div class="controls">
     <label class="search">
@@ -1269,7 +1303,229 @@
     { id: "c17-exodus-4-22", week: 17, book: "Exodus", label: "10/14/26", tag: "Verse", front: "Israel is my ______, my ______. (Exodus 4:22)",
       back: ["Israel is my son, my firstborn. (Exodus 4:22)"] },
     { id: "c17-18th-dynasty-superpower", week: 17, book: "Exodus", label: "10/14/26", tag: "Fact", front: "What is significant about the 18th Dynasty's status in the world?",
-      back: ["It was the world's first superpower."] }
+      back: ["It was the world's first superpower."] },
+
+    // ===== Midterm Review =====
+    // A compiled practice set built from the OTS1 Midterm Study Guide,
+    // organized into the study guide's own sections (used here as
+    // "sections" rather than "classes," since this isn't tied to one day).
+    // Most answers duplicate cards already above, sourced from your class
+    // notes. Items marked "(General ... — verify against your notes.)"
+    // fill topics your notes don't cover yet with general Old Testament
+    // background — they are NOT confirmed from your specific lectures, so
+    // double-check them before trusting them on the exam.
+
+    // Section: Definitions
+    { id: "mt-inspiration", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What is "inspiration"?',
+      back: ["God intentionally intervening in the writing process, such that man perfectly communicated the message that God intended for His people for all time."] },
+    { id: "mt-canon", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What is "canon"?',
+      back: ["The recognition of the inspired books of Scripture."] },
+    { id: "mt-covenant", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What is a "covenant"?',
+      back: ["A collection of promises that shape and regulate redemptive history."] },
+    { id: "mt-chiasm", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What is a "chiasm"?',
+      back: ["A literary structure that arranges ideas in a mirrored, symmetrical pattern (A-B-C-B′-A′), so the center of the structure carries the main emphasis.", "(General literary-structure background — verify the exact wording against your notes.)"] },
+    { id: "mt-chiasm-center", week: 101, book: "Midterm Review", label: "Definitions", tag: "Fact", front: "What is the most important part of a chiasm?",
+      back: ["The center, which gets emphasized the most."] },
+    { id: "mt-intertextuality", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What is "intertextuality"?',
+      back: ["How one author of Scripture quotes another author of Scripture."] },
+    { id: "mt-remembering", week: 101, book: "Midterm Review", label: "Definitions", tag: "Definition", front: 'What does "remembering" mean, biblically?',
+      back: ["Taking someone and placing them at the forefront of your mind, such that you are compelled to action."] },
+
+    // Section: Suggested Themes
+    { id: "mt-theme-ot", week: 102, book: "Midterm Review", label: "Suggested Themes", tag: "Fact", front: "What is the suggested theme of the Old Testament?",
+      back: ["The glory and reign of God."] },
+    { id: "mt-theme-genesis", week: 102, book: "Midterm Review", label: "Suggested Themes", tag: "Fact", front: "What is the suggested theme of Genesis?",
+      back: ["God begins."] },
+    { id: "mt-theme-exodus", week: 102, book: "Midterm Review", label: "Suggested Themes", tag: "Fact", front: "What is the suggested theme of Exodus?",
+      back: ["God forms a nation."] },
+
+    // Section: Key Verses & Chapters
+    { id: "mt-genesis-3", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What happens in Genesis 3?",
+      back: ["The fall of man — the serpent tempts Eve, Adam and Eve sin by eating from the forbidden tree, and they are cast out of the garden.", "(General summary — verify against your notes.)"] },
+    { id: "mt-genesis-3-15", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "Fill in the blank — Genesis 3:15: “And I will put enmity between you and the woman, and between your offspring and her offspring; he shall ______ your head, and you shall ______ his heel.”",
+      back: ["“And I will put enmity between you and the woman, and between your offspring and her offspring; he shall bruise your head, and you shall bruise his heel.” (Genesis 3:15)", "(Wording may vary by translation — check it against the version used in class.)"] },
+    { id: "mt-genesis-1-26", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "Then God said, \"Let ______ make man in ______ image, according to ______ likeness.\" (Genesis 1:26)",
+      back: ["Then God said, \"Let us make man in our image, according to our likeness.\" (Genesis 1:26)"] },
+    { id: "mt-genesis-6-5", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "According to Genesis 6:5, what is the problem behind all problems for mankind?",
+      back: ["The heart."] },
+    { id: "mt-genesis-6-5-verse", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "Fill in the blank — Genesis 6:5: “Then the LORD saw that the wickedness of man was great on the earth, and that every intent of the thoughts of his heart was only ______ continually.”",
+      back: ["“Then the LORD saw that the wickedness of man was great on the earth, and that every intent of the thoughts of his heart was only evil continually.” (Genesis 6:5)", "(General wording — verify against your notes/translation.)"] },
+    { id: "mt-genesis-11", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What happens in Genesis 11?",
+      back: ["The Tower of Babel — humanity, in pride, builds a tower to make a name for itself, and God confuses their languages and scatters them.", "(General summary — verify against your notes.)"] },
+    { id: "mt-genesis-12", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What happens in Genesis 12?",
+      back: ["God calls Abram, promising to make him into a great nation and to bless him — the beginning of the Abrahamic narrative.", "(General summary — verify against your notes.)"] },
+    { id: "mt-genesis-15-6", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "And he ______, and it was credited to him as ______. (Genesis 15:6)",
+      back: ["And he believed in Yahweh, and it was credited to him as righteousness. (Genesis 15:6)"] },
+    { id: "mt-genesis-17-6", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "Fill in the blank — Genesis 17:6: “I will make you exceedingly fruitful, and I will make nations of you, and ______ will come forth from you.”",
+      back: ["“I will make you exceedingly fruitful, and I will make nations of you, and kings will come forth from you.” (Genesis 17:6)", "(General wording — verify against your notes/translation.)"] },
+    { id: "mt-genesis-22", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What is Genesis 22?",
+      back: ["The final exam and ultimate test of Abraham's faith."] },
+    { id: "mt-genesis-27", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What happens in Genesis 27?",
+      back: ["Jacob, with his mother Rebekah's help, deceives his father Isaac into giving him the blessing meant for his older brother Esau.", "(General summary — verify against your notes.)"] },
+    { id: "mt-genesis-28", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What does Jacob's dream in Genesis 28 teach?",
+      back: ["That the way between God and man has not been lost."] },
+    { id: "mt-genesis-49", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What does Genesis 49:10–12 prophesy about Judah?",
+      back: ["That the scepter (ruling authority) will not depart from Judah until the one to whom it belongs comes — pointing to Judah as the royal, kingly tribe.", "(General summary of the passage — verify the exact wording against your notes/translation.)"] },
+    { id: "mt-genesis-49-destiny", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Fact", front: "What does the prophecy of Genesis 49 set?",
+      back: ["The destiny of the 12 tribes of Israel."] },
+    { id: "mt-genesis-50-20", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Verse", front: "As for you, you meant ______ against me, but God meant it for ______, to bring it about that many people should be kept alive, as they are today. (Genesis 50:20)",
+      back: ["As for you, you meant evil against me, but God meant it for good, to bring it about that many people should be kept alive, as they are today. (Genesis 50:20)"] },
+    { id: "mt-inspiration-verses", week: 103, book: "Midterm Review", label: "Key Verses & Chapters", tag: "Reference", front: "What two verses support the doctrine of inspiration?",
+      back: ["2 Timothy 3:16–17", "2 Peter 1:20–21"] },
+
+    // Section: Locations
+    { id: "mt-mount-moriah", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "On what mountain did Abraham nearly sacrifice Isaac?",
+      back: ["Mount Moriah."] },
+    { id: "mt-peniel", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: 'What does "Peniel" mean?',
+      back: ['"Face of God."'] },
+    { id: "mt-bethel", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: 'What does "Bethel" mean?',
+      back: ['"The house of God."'] },
+    { id: "mt-babylon", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "What does Babylon represent?",
+      back: ["The center and spearhead of corporate evil."] },
+    { id: "mt-plains-moab", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "What is the significance of the Plains of Moab?",
+      back: ["Where Israel camps just before entering the Promised Land, and where Moses delivers his final speeches and dies.", "(General summary — verify against your notes.)"] },
+    { id: "mt-cave-machpelah", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "What is the significance of the Cave of Machpelah?",
+      back: ["The burial site Abraham purchased near Hebron — the resting place of Abraham, Sarah, Isaac, Rebekah, Jacob, and Leah.", "(General summary — verify against your notes.)"] },
+    { id: "mt-longitudinal-regions", week: 104, book: "Midterm Review", label: "Locations", tag: "List", front: "The four longitudinal regions",
+      back: ["Coastal plain", "Judean hill country (hill country)", "Jordan Rift Valley (Jordan Valley)", "Trans-Jordan plateau"] },
+    { id: "mt-israel-land-bridge", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "Where is the land of Israel positioned relative to the rest of the ancient world?",
+      back: ["Israel is the land bridge of the ancient world."] },
+    { id: "mt-benjamin-plateau", week: 104, book: "Midterm Review", label: "Locations", tag: "Fact", front: "What region controls all the major traffic of Ancient Israel?",
+      back: ["The Central Benjamin Plateau."] },
+
+    // Section: Dates
+    { id: "mt-exodus-date", week: 105, book: "Midterm Review", label: "Dates", tag: "Fact", front: "What is the date of the Exodus?",
+      back: ["1446 BC."] },
+    { id: "mt-pentateuch-setting", week: 105, book: "Midterm Review", label: "Dates", tag: "Fact", front: "What is the historical setting of the Pentateuch?",
+      back: ["Israel needs to cross the Jordan River and go to war."] },
+
+    // Section: Concepts & Terms
+    { id: "mt-corporate-solidarity", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Definition", front: 'What is "corporate solidarity"?',
+      back: ["When the one represents the many."] },
+    { id: "mt-ironic-retaliation", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Definition", front: 'What is "ironic retaliation"?',
+      back: ["When a person's punishment mirrors or fits the very sin they committed — a measure-for-measure judgment (for example, Jacob deceives his father using animal skins, and is later himself deceived by his sons through an animal's blood on Joseph's coat).", "(General concept — verify against your notes for the specific example given in class.)"] },
+    { id: "mt-jedp", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Definition", front: 'What is "the JEPD theory" (documentary hypothesis)?',
+      back: ["The Pentateuch was a combined document written by multiple authors over a long period of time."] },
+    { id: "mt-mosaic-authorship", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Fact", front: "Who wrote the Pentateuch, according to the lectures?",
+      back: ["Moses wrote the Pentateuch."] },
+    { id: "mt-evolution-category", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Fact", front: "How should evolution be categorized, according to the lectures?",
+      back: ["As philosophy and history."] },
+    { id: "mt-genesis-genre", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Fact", front: "How should the genre of Genesis be read — as myth, miscommunication, or myth-busting?",
+      back: ["As myth-busting — Genesis presents itself as real history that corrects the mythological creation accounts of the Ancient Near East, rather than being myth itself.", "(General inference from the course's approach — verify this is the exact framing from your notes.)"] },
+    { id: "mt-creationism", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Definition", front: 'What is "creationism" (as it relates to the six days)?',
+      back: ["The view that Genesis 1 describes six literal, 24-hour days of creation.", "(General definition — verify against your notes.)"] },
+    { id: "mt-authorial-intent", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Definition", front: 'What is "authorial intent"?',
+      back: ["The meaning of a text is grounded in what its original author intended to communicate — not in whatever a later reader perceives.", "(General definition — verify against your notes.)"] },
+    { id: "mt-protoevangelium", week: 106, book: "Midterm Review", label: "Concepts & Terms", tag: "Fact", front: "What is Genesis 3:15 commonly referred to as?",
+      back: ["The Protoevangelium — the first gospel."] },
+
+    // Section: Name Meanings
+    { id: "mt-adam", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Adam" mean?',
+      back: ['"Man" (from the Hebrew word for ground/earth — "red earth").', "(General etymology — verify against your notes.)"] },
+    { id: "mt-eve", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does "Eve" translate to?',
+      back: ['"Living" or "life."'] },
+    { id: "mt-cain", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Cain" mean?',
+      back: ['"Acquired" or "gotten" (Genesis 4:1 — "I have gotten/acquired a man").', "(General etymology — verify against your notes.)"] },
+    { id: "mt-seth", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Seth" mean?',
+      back: ['"Appointed" or "granted."', "(General etymology — verify against your notes.)"] },
+    { id: "mt-methuselah", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Methuselah" translate to?',
+      back: ["When he dies, it will be sent."] },
+    { id: "mt-noah", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does "Noah" mean?',
+      back: ['"Rest."'] },
+    { id: "mt-melchizedek-name", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Melchizedek" mean?',
+      back: ['"King of righteousness."', "(General etymology — verify against your notes.)"] },
+    { id: "mt-abram-abraham", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What do the names "Abram" and "Abraham" mean?',
+      back: ['Abram means "exalted father." Abraham means "father of many nations."'] },
+    { id: "mt-sarah", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Sarah" mean?',
+      back: ['"Princess" or "noblewoman."', "(General etymology — verify against your notes.)"] },
+    { id: "mt-isaac", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does the name "Isaac" mean?',
+      back: ['"He laughs" / "laughter."', "(General etymology — verify against your notes.)"] },
+    { id: "mt-israel-name", week: 107, book: "Midterm Review", label: "Name Meanings", tag: "Fact", front: 'What does "Israel" translate to?',
+      back: ['"God fights" or "God fights for you."'] },
+
+    // Section: Covenants
+    { id: "mt-noahic-covenant", week: 108, book: "Midterm Review", label: "Covenants", tag: "Fact", front: 'What does the "Noahic Covenant" promise?',
+      back: ["Worldwide stability."] },
+    { id: "mt-abrahamic-components", week: 108, book: "Midterm Review", label: "Covenants", tag: "List", front: "Three components of the Abrahamic covenant",
+      back: ["1. Land", "2. Seed", "3. Blessing"] },
+    { id: "mt-abrahamic-unilateral", week: 108, book: "Midterm Review", label: "Covenants", tag: "Fact", front: "Is the Abrahamic covenant unilateral or bilateral?",
+      back: ["Unilateral."] },
+    { id: "mt-abrahamic-sign", week: 108, book: "Midterm Review", label: "Covenants", tag: "Fact", front: "What becomes the sign of the Abrahamic Covenant?",
+      back: ["Circumcision."] },
+    { id: "mt-abrahamic-controls", week: 108, book: "Midterm Review", label: "Covenants", tag: "Fact", front: "What does the Abrahamic covenant control?",
+      back: ["The destiny of Israel, and thereby the destiny of the world."] },
+
+    // Section: Core Values
+    { id: "mt-abraham-core-value", week: 109, book: "Midterm Review", label: "Core Values", tag: "Fact", front: "What core value is learned from Abraham?",
+      back: ["Faith — trusting God's promises even when the circumstances seem impossible.", "(General inference from the Abraham material — verify against your notes for the professor's exact phrasing.)"] },
+    { id: "mt-isaac-jacob-core-value", week: 109, book: "Midterm Review", label: "Core Values", tag: "Fact", front: "What core lessons do the stories of Isaac and Jacob teach?",
+      back: ["That God is with His people and fights for His people."] },
+    { id: "mt-joseph-judah-core-value", week: 109, book: "Midterm Review", label: "Core Values", tag: "Fact", front: "What core lesson do Joseph and Judah teach?",
+      back: ["That God turns evil into good."] },
+
+    // Section: Nation Origins
+    { id: "mt-moab-ammon", week: 110, book: "Midterm Review", label: "Nation Origins", tag: "Fact", front: "What two nations are birthed from the incest of Lot and his two daughters?",
+      back: ["The Moabites and the Ammonites."] },
+    { id: "mt-edom", week: 110, book: "Midterm Review", label: "Nation Origins", tag: "Fact", front: "What is the origin of the nation of Edom?",
+      back: ["The Edomites descend from Esau, Jacob's twin brother, whose other name was Edom (\"red\") — tied to the red stew he traded his birthright for.", "(General summary — verify against your notes.)"] },
+
+    // Section: Structure
+    { id: "mt-six-days", week: 111, book: "Midterm Review", label: "Structure", tag: "Fact", front: "What is the structure of the six days of creation?",
+      back: ["Days 1–3 form the realms (light/dark, sky/sea, land), and days 4–6 fill them (sun/moon/stars, sea creatures/birds, land animals/man) — often summarized as three days of forming followed by three days of filling.", "(General framework — verify against your notes.)"] },
+    { id: "mt-genesis-structure", week: 111, book: "Midterm Review", label: "Structure", tag: "Fact", front: "What is the structure of Genesis organized around?",
+      back: ["Families / generations."] },
+    { id: "mt-genesis-winnowing", week: 111, book: "Midterm Review", label: "Structure", tag: "Fact", front: 'What is the "winnowing effect" in the structure of Genesis?',
+      back: ["The structure of Genesis, with all its genealogies, has a winnowing effect that removes certain families and highlights other families."] },
+    { id: "mt-genesis5-features", week: 111, book: "Midterm Review", label: "Structure", tag: "List", front: "Three significant characteristics of the genealogies in Genesis 5",
+      back: ["1. Linear and formulaic", "2. Long lives", "3. Death"] },
+    { id: "mt-genesis5-breaks", week: 111, book: "Midterm Review", label: "Structure", tag: "List", front: "Where are the major breaks in the genealogy of Genesis 5?",
+      back: ["Enoch, who walked with God.", "Noah, whose name means \"rest.\""] },
+
+    // Section: Miscellaneous
+    { id: "mt-ot-languages", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What languages was the Old Testament originally written in?",
+      back: ["Hebrew and Aramaic."] },
+    { id: "mt-apply-scripture", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "List", front: "Four major ways to apply Scripture",
+      back: ["1. Know", "2. Worship / awe", "3. Responding to God's character", "4. Worldview"] },
+    { id: "mt-satan-genesis3", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What does Satan do in Genesis 3?",
+      back: ["He tempts Eve by questioning and twisting God's word, casting doubt on God's goodness and truthfulness, leading her — and then Adam — to disobey.", "(General summary — verify against your notes.)"] },
+    { id: "mt-sons-of-god", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: 'Who are the "sons of God" in Genesis 6:2, according to the lectures?',
+      back: ["Fallen angels."] },
+    { id: "mt-genesis6-2-result", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What did Satan's plot in Genesis 6:2 result in?",
+      back: ["The Nephilim — a corrupted offspring from the union of the fallen angels (\"sons of God\") and human women, contributing to the earth's wickedness that led to the flood.", "(General summary — verify against your notes.)"] },
+    { id: "mt-noah-drunk", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What is the significance of Noah getting drunk and naked?",
+      back: ["It shows that sin persists even after the flood's judgment — through Noah himself, in the \"new creation\" — and it sets up Ham's shameful discovery that leads to the curse on Canaan.", "(General summary — verify against your notes.)"] },
+    { id: "mt-melchizedek-offices", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What 2 offices does Melchizedek merge together?",
+      back: ["King and priest."] },
+    { id: "mt-terah-son", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Which of Terah's sons does God form His chosen nation through?",
+      back: ["Abram (Abraham)."] },
+    { id: "mt-genesis15-walk", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Why does only God walk through the animal pieces in Genesis 15?",
+      back: ["Because the Abrahamic covenant is unilateral — it rests entirely on God's faithfulness to keep His promise, not on Abraham's performance, so only God passes through to seal it.", "(General inference tying back to the covenant's unilateral nature — verify the professor's exact explanation against your notes.)"] },
+    { id: "mt-sodom-sin", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "According to the lectures, what is the sin of Sodom and Gomorrah?",
+      back: ["Homosexuality."] },
+    { id: "mt-sodom-not-hospitality", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "According to the lectures, what is NOT the sin of Sodom and Gomorrah?",
+      back: ["A lack of hospitality."] },
+    { id: "mt-royal-tribe", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Which tribe becomes the royal tribe of Israel?",
+      back: ["Judah."] },
+    { id: "mt-flood-global", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Was the flood global or local?",
+      back: ["Global."] },
+    { id: "mt-flood-judgment", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What kind of judgment was the flood — global or local?",
+      back: ["A global judgment, not a local judgment."] },
+    { id: "mt-exodus-pharaoh", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Who is the pharaoh of the Exodus?",
+      back: ["Amenhotep II."] },
+    { id: "mt-jacob-blessed", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Why does God continually bless Jacob?",
+      back: ["Because of God's covenant faithfulness — to keep the promises He made to Abraham and Isaac, not because of anything Jacob himself earned.", "(General inference — verify against your notes for the professor's exact reasoning.)"] },
+    { id: "mt-severing-history", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Are there consequences to severing the Bible from history?",
+      back: ["Yes — if the Bible isn't tied to real, verifiable history, its theological claims lose their grounding, and the gospel and God's promises become myth rather than something that actually happened and can be trusted.", "(General inference tying back to the OT being \"real, actual, factual, verifiable history\" — verify against your notes.)"] },
+    { id: "mt-ane-gods", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: 'How do other Ancient Near Eastern creation accounts portray their "gods"?',
+      back: ["As capricious, violent, and self-interested — created out of conflict, often indifferent or hostile to humanity, who is created almost as an afterthought or as slave labor, without intent, beauty, purpose, or love. This contrasts with Genesis, where God creates intentionally, calls His creation good, and gives mankind purpose, dignity, and love.", "(General comparative-background — verify against your notes.)"] },
+    { id: "mt-creation-man", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What was creation's original relationship with man?",
+      back: ["Creation was originally a man-hugger."] },
+    { id: "mt-realism-authenticity", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fill-in", front: "Realism is a mark of ______.",
+      back: ["Realism is a mark of authenticity."] },
+    { id: "mt-levirate-marriage", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "What is at the heart of a levirate marriage?",
+      back: ["A sacrificial love."] },
+    { id: "mt-exodus-dynasty", week: 112, book: "Midterm Review", label: "Miscellaneous", tag: "Fact", front: "Which Egyptian dynasty does the book of Exodus occur in?",
+      back: ["The 18th Dynasty — the world's first superpower."] }
   ];
 
   var STORAGE_KEY = "ot-study-cards:known:v1";
@@ -1286,6 +1542,7 @@
   }
 
   var known = loadKnown();
+  var scope = "class"; // "class" (Genesis/Exodus, by day) | "midterm" (Midterm Review, by section) — its own tab
   var view = "quiz"; // "cards" | "list" | "quiz"
   var query = "";
   var currentIndex = 0;
@@ -1293,18 +1550,18 @@
 
   // Quiz state
   var quizStage = "setup"; // "setup" | "question" | "summary"
-  var quizSelectedWeeks = null; // Set of class numbers currently checked in quiz setup
+  var quizSelectedWeeks = null; // Set of class/section numbers currently checked in quiz setup
   var quizSelectedBooks = null; // Set of book names currently checked in quiz setup
-  var quizRunWeeks = null; // Set of class numbers used to start the quiz currently in progress
+  var quizRunWeeks = null; // Set of class/section numbers used to start the quiz currently in progress
   var quizRunBooks = null; // Set of book names used to start the quiz currently in progress
-  var quizShowAllClasses = false; // whether the class chip row is expanded past the recent-classes cutoff
-  var RECENT_CLASS_COUNT = 6; // how many of the newest classes show before "Show earlier classes"
+  var quizShowAllClasses = false; // whether the class/section chip row is expanded past the recent cutoff
+  var RECENT_CLASS_COUNT = 6; // how many of the newest classes/sections show before "Show earlier"
   var quizQueue = [];
   var quizPos = 0;
   var quizRevealed = false;
   var quizTyped = "";
   var quizResults = []; // { id, correct }
-  var lastQuizScore = null; // { correct, total }
+  var lastQuizScore = { class: null, midterm: null }; // { correct, total }, kept separately per tab
 
   // Suggestion box + hidden admin panel state
   var dbNS = null; // resolved `db` capability namespace, or null if unavailable
@@ -1326,6 +1583,8 @@
   var viewCardsBtn = document.getElementById("viewCardsBtn");
   var viewListBtn = document.getElementById("viewListBtn");
   var viewQuizBtn = document.getElementById("viewQuizBtn");
+  var scopeClassBtn = document.getElementById("scopeClassBtn");
+  var scopeMidtermBtn = document.getElementById("scopeMidtermBtn");
   var knownCountEl = document.getElementById("knownCount");
   var totalCountEl = document.getElementById("totalCount");
   var weekSummaryEl = document.getElementById("weekSummary");
@@ -1342,8 +1601,18 @@
     return hay.indexOf(query.toLowerCase()) !== -1;
   }
 
+  // The current tab's slice of TERMS — Class Notes is everything except the
+  // Midterm Review set, Midterm Review is only that set. Cards/List/Quiz,
+  // counts, and search all work from this instead of the full TERMS array,
+  // so the two tabs never mix.
+  function scopedTerms() {
+    return TERMS.filter(function (t) {
+      return scope === "midterm" ? t.book === "Midterm Review" : t.book !== "Midterm Review";
+    });
+  }
+
   function filteredTerms() {
-    return TERMS.filter(matchesQuery);
+    return scopedTerms().filter(matchesQuery);
   }
 
   function weeksOf(list) {
@@ -1370,12 +1639,30 @@
     return seen;
   }
 
+  // A class group reads as "Class <date>" for an actual day of lecture, or
+  // "Section <topic>" for a thematic grouping that isn't tied to one day
+  // (the Midterm Review book, organized by study-guide topic instead).
+  function groupWordFor(book) {
+    return book === "Midterm Review" ? "Section" : "Class";
+  }
+
+  function weekBook(w) {
+    var item = TERMS.filter(function (t) { return t.week === w; })[0];
+    return item ? item.book : "";
+  }
+
   function updateCounts() {
-    var knownInSet = TERMS.filter(function (t) { return known[t.id]; }).length;
+    var terms = scopedTerms();
+    var knownInSet = terms.filter(function (t) { return known[t.id]; }).length;
     knownCountEl.textContent = knownInSet;
-    totalCountEl.textContent = TERMS.length;
-    var weeks = weeksOf(TERMS);
-    weekSummaryEl.textContent = weeks.length ? ("Class" + (weeks.length > 1 ? "es " : " ") + weeks.map(sessionLabel).join(", ")) : "";
+    totalCountEl.textContent = terms.length;
+    var books = booksOf(terms);
+    weekSummaryEl.textContent = books.map(function (b) {
+      var count = weeksOf(terms.filter(function (t) { return t.book === b; })).length;
+      var word = groupWordFor(b).toLowerCase();
+      var plural = word === "class" ? "classes" : "sections";
+      return count + " " + b + " " + (count === 1 ? word : plural);
+    }).join(" · ");
   }
 
   /* ================= List (glossary) view ================= */
@@ -1391,12 +1678,13 @@
     books.forEach(function (book) {
       var bookItems = list.filter(function (t) { return t.book === book; });
       var weeks = weeksOf(bookItems);
+      var groupWord = groupWordFor(book);
       html += '<section class="book-section"><h2 class="book-heading">' + escapeHtml(book) + '</h2>';
       weeks.forEach(function (w) {
         var items = bookItems.filter(function (t) { return t.week === w; });
-        html += '<section class="week"><div class="week-label"><span class="tab">Class ' + escapeHtml(sessionLabel(w)) + '</span><span class="rule"></span></div><div class="card-list">';
+        html += '<section class="week"><div class="week-label"><span class="tab">' + groupWord + ' ' + escapeHtml(sessionLabel(w)) + '</span><span class="rule"></span></div><div class="card-list">';
         items.forEach(function (item) {
-          var globalIdx = TERMS.indexOf(item) + 1;
+          var globalIdx = scopedTerms().indexOf(item) + 1;
           var isKnown = !!known[item.id];
           html += '<article class="entry">' +
             '<span class="idx">' + String(globalIdx).padStart(2, "0") + '</span>' +
@@ -1435,7 +1723,7 @@
     if (currentIndex >= list.length) currentIndex = 0;
     var item = list[currentIndex];
     var isKnown = !!known[item.id];
-    var globalIdx = TERMS.indexOf(item) + 1;
+    var globalIdx = scopedTerms().indexOf(item) + 1;
 
     var dotsHtml = list.map(function (t, i) {
       var cls = [];
@@ -1454,7 +1742,7 @@
               '<div class="hint">Click to reveal</div>' +
             '</div>' +
             '<div class="face back">' +
-              '<div class="top-row"><span class="tag">' + escapeHtml(item.tag) + '</span><span class="idx mono">' + escapeHtml(item.book || "") + (item.book ? " · " : "") + 'Class ' + escapeHtml(String(item.label || item.week)) + '</span></div>' +
+              '<div class="top-row"><span class="tag">' + escapeHtml(item.tag) + '</span><span class="idx mono">' + escapeHtml(item.book || "") + (item.book ? " · " : "") + groupWordFor(item.book) + ' ' + escapeHtml(String(item.label || item.week)) + '</span></div>' +
               '<div class="body"><p>' + item.back.map(function (l) { return '<span class="ref-line">' + escapeHtml(l) + '</span>'; }).join("") + '</p></div>' +
               '<div class="hint">Click to flip back</div>' +
             '</div>' +
@@ -1529,10 +1817,18 @@
   }
 
   function renderQuizSetup() {
-    var weeks = weeksOf(TERMS);
-    var books = booksOf(TERMS);
+    var terms = scopedTerms();
+    var weeks = weeksOf(terms);
+    var books = booksOf(terms);
     if (!quizSelectedWeeks) quizSelectedWeeks = new Set();
     if (!quizSelectedBooks) quizSelectedBooks = new Set(books);
+
+    // A single, scope-wide word for "Class" vs "Section" — both tabs are
+    // internally consistent (Class Notes is always classes, Midterm Review
+    // is always sections), so the instructional copy can just pick one.
+    var scopeWord = scope === "midterm" ? "Section" : "Class";
+    var scopeWordLower = scopeWord.toLowerCase();
+    var scopeWordPluralLower = scopeWord === "Class" ? "classes" : "sections";
 
     var allBooksSelected = quizSelectedBooks.size === books.length;
     var bookChips = books.length > 1 ?
@@ -1547,8 +1843,8 @@
     var allSelected = quizSelectedWeeks.size === weeks.length;
     var nothingSelectedYet = quizSelectedWeeks.size === 0;
 
-    // Newest classes first, so "today's class" is easy to find without
-    // hunting through a long, ever-growing row. Once there are more than
+    // Newest first, so "today's class" is easy to find without hunting
+    // through a long, ever-growing row. Once there are more than
     // RECENT_CLASS_COUNT, collapse to the most recent ones by default.
     var weeksDesc = weeks.slice().reverse();
     var showAllClasses = quizShowAllClasses || weeks.length <= RECENT_CLASS_COUNT;
@@ -1556,38 +1852,40 @@
     var hiddenCount = weeks.length - visibleWeeks.length;
 
     var classLabel = nothingSelectedYet ?
-      '<div class="filter-label filter-label-attention">Class &mdash; tap at least one to begin</div>' :
-      '<div class="filter-label">Class</div>';
+      '<div class="filter-label filter-label-attention">' + scopeWord + ' &mdash; tap at least one to begin</div>' :
+      '<div class="filter-label">' + scopeWord + '</div>';
 
     var chips = classLabel + '<div class="chip-row" id="weekChips">' +
-      '<button type="button" class="chip" data-week="all" aria-pressed="' + allSelected + '">All classes</button>' +
+      '<button type="button" class="chip" data-week="all" aria-pressed="' + allSelected + '">All ' + scopeWordPluralLower + '</button>' +
       visibleWeeks.map(function (w) {
-        return '<button type="button" class="chip" data-week="' + w + '" aria-pressed="' + quizSelectedWeeks.has(w) + '">Class ' + escapeHtml(sessionLabel(w)) + '</button>';
+        return '<button type="button" class="chip" data-week="' + w + '" aria-pressed="' + quizSelectedWeeks.has(w) + '">' + groupWordFor(weekBook(w)) + ' ' + escapeHtml(sessionLabel(w)) + '</button>';
       }).join("") +
       '</div>' +
       (weeks.length > RECENT_CLASS_COUNT ?
         '<button type="button" class="show-more-link" id="toggleClassesBtn">' +
-          (showAllClasses ? "Show fewer classes" : "Show " + hiddenCount + " earlier class" + (hiddenCount === 1 ? "" : "es")) +
+          (showAllClasses ? "Show fewer " + scopeWordPluralLower : "Show " + hiddenCount + " earlier " + (hiddenCount === 1 ? scopeWordLower : scopeWordPluralLower)) +
         '</button>'
         : "");
 
     var scoreHtml = "";
-    if (lastQuizScore) {
-      scoreHtml = '<div class="last-score">Last round: ' + lastQuizScore.correct + ' / ' + lastQuizScore.total + ' correct</div>';
+    if (lastQuizScore[scope]) {
+      scoreHtml = '<div class="last-score">Last round: ' + lastQuizScore[scope].correct + ' / ' + lastQuizScore[scope].total + ' correct</div>';
     }
 
-    var count = TERMS.filter(function (t) { return quizSelectedWeeks.has(t.week) && quizSelectedBooks.has(t.book); }).length;
+    var count = terms.filter(function (t) { return quizSelectedWeeks.has(t.week) && quizSelectedBooks.has(t.book); }).length;
     var startDisabled = count === 0;
+
+    var leadBooksPart = books.length > 1 ? "All books are included by default &mdash; narrow to one if you want. " : "";
 
     mainEl.innerHTML =
       '<div class="quiz">' +
         '<div class="quiz-setup">' +
-          '<h2>Practice quiz</h2>' +
-          '<p class="lead">Both books are included by default &mdash; narrow to one if you want. Then tap at least one class below to build your quiz, type each answer from memory, and grade yourself.</p>' +
+          '<h2>' + (scope === "midterm" ? "Midterm practice quiz" : "Practice quiz") + '</h2>' +
+          '<p class="lead">' + leadBooksPart + 'Tap at least one ' + scopeWordLower + ' below to build your quiz, type each answer from memory, and grade yourself.</p>' +
           bookChips +
           chips +
           '<button type="button" class="start-quiz-btn" id="startQuizBtn"' + (startDisabled ? " disabled" : "") + '>' +
-            (startDisabled ? "Select at least one class" : "Start quiz (" + count + (count === 1 ? " card)" : " cards)")) +
+            (startDisabled ? "Select at least one " + scopeWordLower : "Start quiz (" + count + (count === 1 ? " card)" : " cards)")) +
           '</button>' +
           scoreHtml +
         '</div>' +
@@ -1629,7 +1927,7 @@
     }
 
     document.getElementById("startQuizBtn").addEventListener("click", function () {
-      var pool = TERMS.filter(function (t) { return quizSelectedWeeks.has(t.week) && quizSelectedBooks.has(t.book); });
+      var pool = terms.filter(function (t) { return quizSelectedWeeks.has(t.week) && quizSelectedBooks.has(t.book); });
       if (pool.length) {
         quizRunWeeks = new Set(quizSelectedWeeks);
         quizRunBooks = new Set(quizSelectedBooks);
@@ -1656,7 +1954,7 @@
     quizRevealed = false;
     quizTyped = "";
     if (quizPos >= quizQueue.length) {
-      lastQuizScore = {
+      lastQuizScore[scope] = {
         correct: quizResults.filter(function (r) { return r.correct; }).length,
         total: quizResults.length
       };
@@ -1678,7 +1976,7 @@
           '<div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>' +
         '</div>' +
         '<div class="quiz-card">' +
-          '<div class="top-row"><span class="tag">' + escapeHtml(item.tag) + '</span><span class="idx mono">' + escapeHtml(item.book || "") + (item.book ? " · " : "") + 'Class ' + escapeHtml(String(item.label || item.week)) + '</span></div>' +
+          '<div class="top-row"><span class="tag">' + escapeHtml(item.tag) + '</span><span class="idx mono">' + escapeHtml(item.book || "") + (item.book ? " · " : "") + groupWordFor(item.book) + ' ' + escapeHtml(String(item.label || item.week)) + '</span></div>' +
           '<p class="quiz-prompt">' + escapeHtml(item.front) + '</p>';
 
     if (!quizRevealed) {
@@ -1736,7 +2034,7 @@
     mainEl.innerHTML =
       '<div class="quiz">' +
         '<div class="quiz-summary">' +
-          '<div class="score-big">' + lastQuizScore.correct + ' / ' + lastQuizScore.total + '</div>' +
+          '<div class="score-big">' + lastQuizScore[scope].correct + ' / ' + lastQuizScore[scope].total + '</div>' +
           '<div class="score-sub">' + (missed.length ? "Review these before your next round:" : "Every answer graded correct — nice work.") + '</div>' +
           missedHtml +
           '<div class="quiz-summary-actions">' +
@@ -2003,6 +2301,28 @@
   viewCardsBtn.addEventListener("click", function () { setView("cards"); });
   viewListBtn.addEventListener("click", function () { setView("list"); });
   viewQuizBtn.addEventListener("click", function () { setView("quiz"); });
+
+  // Switching tabs swaps the whole working set (Class Notes vs. Midterm
+  // Review), so the per-set selections reset rather than carrying over
+  // stale class/section picks or an in-progress quiz from the other tab.
+  function setScope(s) {
+    if (s === scope) return;
+    scope = s;
+    scopeClassBtn.setAttribute("aria-selected", String(s === "class"));
+    scopeMidtermBtn.setAttribute("aria-selected", String(s === "midterm"));
+    query = "";
+    searchInput.value = "";
+    currentIndex = 0;
+    flipped = false;
+    quizSelectedWeeks = null;
+    quizSelectedBooks = null;
+    quizShowAllClasses = false;
+    quizStage = "setup";
+    renderCurrentView();
+  }
+
+  scopeClassBtn.addEventListener("click", function () { setScope("class"); });
+  scopeMidtermBtn.addEventListener("click", function () { setScope("midterm"); });
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
