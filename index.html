@@ -1981,7 +1981,7 @@
 
     if (!quizRevealed) {
       html +=
-        '<textarea class="quiz-input" id="quizInput" placeholder="Type your answer&hellip;" autofocus></textarea>' +
+        '<textarea class="quiz-input" id="quizInput" placeholder="Type your answer&hellip;"></textarea>' +
         '<div class="quiz-actions-row"><button type="button" class="check-btn" id="checkBtn">Check answer</button></div>';
     } else {
       html +=
@@ -2007,7 +2007,12 @@
 
     var quizInput = document.getElementById("quizInput");
     if (!quizRevealed) {
-      quizInput.focus();
+      // Only jump into the answer box on devices with a mouse/trackpad —
+      // on phones and tablets, focusing it pops the keyboard open on every
+      // new question. Tap the box to type there instead.
+      if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        quizInput.focus();
+      }
       quizInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitQuizAnswer(); }
       });
