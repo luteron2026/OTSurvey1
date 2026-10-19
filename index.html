@@ -698,7 +698,26 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 12px;
     margin-bottom: 16px;
+  }
+
+  .quiz-card .tag {
+    flex: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .quiz-card .idx {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    text-align: right;
   }
 
   .quiz-prompt {
@@ -816,6 +835,78 @@
     border: 1px solid var(--bad);
     color: var(--bad);
   }
+
+  /* ---------- Multiple choice ---------- */
+
+  .mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .mc-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--rule-strong);
+    border-radius: 4px;
+    padding: 11px 13px;
+    color: var(--ink);
+    font-family: 'Spectral', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.45;
+    cursor: pointer;
+  }
+
+  .mc-option:hover:not(:disabled) { border-color: var(--accent); }
+  .mc-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .mc-option:disabled { cursor: default; }
+
+  .mc-letter {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--rule-strong);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+
+  .mc-text { padding-top: 1px; }
+
+  .mc-option.is-correct {
+    background: var(--good-soft);
+    border-color: var(--good);
+  }
+  .mc-option.is-correct .mc-letter { background: var(--good); border-color: var(--good); color: var(--surface); }
+
+  .mc-option.is-wrong {
+    background: var(--bad-soft);
+    border-color: var(--bad);
+  }
+  .mc-option.is-wrong .mc-letter { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+
+  .mc-option.is-dim { opacity: 0.55; }
+
+  .mc-verdict {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+    outline: none;
+  }
+  .mc-verdict.good { color: var(--good); }
+  .mc-verdict.bad { color: var(--bad); }
 
   .quiz-summary {
     width: 100%;
@@ -1079,7 +1170,7 @@
       <span id="weekSummary"></span>
     </div>
     <p class="how-to">
-      <strong>Class Notes</strong> and <strong>Midterm Review</strong> are separate tabs, each with their own Cards / List / Quiz. <strong>Cards</strong> flip one at a time. <strong>List</strong> shows everything at once, grouped by book or section. <strong>Quiz</strong> tests you &mdash; pick what to study below and grade your own typed answers.
+      <strong>Class Notes</strong> and <strong>Midterm Review</strong> are separate tabs, each with their own Cards / List / Quiz. <strong>Cards</strong> flip one at a time. <strong>List</strong> shows everything at once, grouped by book or section. <strong>Quiz</strong> tests you &mdash; pick what to study below and grade your own typed answers, or switch the Midterm Review quiz to multiple choice like the real exam.
     </p>
   </header>
 
@@ -1528,6 +1619,226 @@
       back: ["The 18th Dynasty — the world's first superpower."] }
   ];
 
+  // ---------- Multiple choice (Midterm Review only) ----------
+  // Keyed by card id: a = the correct option, w = three wrong options.
+  // Wrong options are written to be believable — mostly real terms from the
+  // course that belong to a different question — so you can't pick the
+  // answer just by spotting the odd one out. The full answer from the card
+  // (including any "verify against your notes" line) shows after you pick.
+  var MC = {
+    // Definitions
+    "mt-inspiration": { a: "God intentionally intervening in the writing process, so that man perfectly communicated the message God intended for His people for all time",
+      w: ["The recognition by God's people of which books belong in Scripture", "God dictating each word while setting the human authors' personalities aside", "God guarding the copying process so that every manuscript is error-free"] },
+    "mt-canon": { a: "The recognition of the inspired books of Scripture",
+      w: ["The authority of church councils to make books inspired", "The official list of approved translations of the Old Testament", "The rules for interpreting Scripture correctly"] },
+    "mt-covenant": { a: "A collection of promises that shape and regulate redemptive history",
+      w: ["A legal contract in which both parties earn blessing by keeping its terms", "A set of laws given to govern Israel's worship", "A ceremony in which a king grants land to his servants"] },
+    "mt-chiasm": { a: "A mirrored literary structure (A-B-C-B′-A′) whose center carries the main emphasis",
+      w: ["A pair of parallel lines where the second restates the first", "A repeated refrain that opens and closes each section of a story", "A genealogy that narrows from many families down to one chosen line"] },
+    "mt-chiasm-center": { a: "The center, which gets emphasized the most",
+      w: ["The opening line, which sets the theme", "The closing line, which resolves the theme", "The matching outer pair (A and A′)"] },
+    "mt-intertextuality": { a: "How one author of Scripture quotes another author of Scripture",
+      w: ["How a reader's own context shapes the meaning of a text", "How translators carry a text from Hebrew into another language", "How earlier sources were combined into a single document"] },
+    "mt-remembering": { a: "Placing someone at the forefront of your mind, such that you are compelled to action",
+      w: ["Recalling past events so they can be recorded accurately", "Feeling sorrow over a past failure", "Repeating a promise aloud as a public reminder"] },
+
+    // Suggested Themes
+    "mt-theme-ot": { a: "The glory and reign of God",
+      w: ["The history of the nation of Israel", "God's covenant faithfulness to Abraham", "The redemption of mankind through the law"] },
+    "mt-theme-genesis": { a: "God begins",
+      w: ["God forms a nation", "God fights for His people", "God turns evil into good"] },
+    "mt-theme-exodus": { a: "God forms a nation",
+      w: ["God begins", "God delivers His law", "God dwells with His people"] },
+
+    // Key Verses & Chapters
+    "mt-genesis-3": { a: "The fall — Adam and Eve eat from the forbidden tree and are cast out of the garden",
+      w: ["Cain kills Abel and is sent away as a wanderer", "God creates man and woman in His image", "God judges the earth with the flood"] },
+    "mt-genesis-3-15": { a: "bruise … bruise",
+      w: ["rule over … follow", "curse … bless", "crush … pierce"] },
+    "mt-genesis-1-26": { a: "us … our … our",
+      w: ["me … my … my", "Him … His … His", "them … their … their"] },
+    "mt-genesis-6-5": { a: "The heart",
+      w: ["The flesh", "Pride", "Satan's deception"] },
+    "mt-genesis-6-5-verse": { a: "evil",
+      w: ["pride", "violence", "sin"] },
+    "mt-genesis-11": { a: "The Tower of Babel — God confuses the languages and scatters the people",
+      w: ["God calls Abram out of Ur to a new land", "The flood waters recede and Noah leaves the ark", "The destruction of Sodom and Gomorrah"] },
+    "mt-genesis-12": { a: "God calls Abram and promises to make him a great nation and bless him",
+      w: ["God confirms His covenant with the sign of circumcision", "Abraham is tested with the sacrifice of Isaac", "God scatters the nations at Babel"] },
+    "mt-genesis-15-6": { a: "believed in Yahweh … righteousness",
+      w: ["obeyed Yahweh … faithfulness", "feared God … wisdom", "walked with God … blessing"] },
+    "mt-genesis-17-6": { a: "kings",
+      w: ["priests", "prophets", "blessings"] },
+    "mt-genesis-22": { a: "The final exam and ultimate test of Abraham's faith",
+      w: ["The sign of the Abrahamic covenant", "The beginning of the Abrahamic narrative", "Abraham's purchase of the Cave of Machpelah"] },
+    "mt-genesis-27": { a: "Jacob, with Rebekah's help, deceives Isaac and takes Esau's blessing",
+      w: ["Esau sells his birthright to Jacob for red stew", "Jacob wrestles with God at Peniel", "Jacob dreams of a stairway at Bethel"] },
+    "mt-genesis-28": { a: "That the way between God and man has not been lost",
+      w: ["That God fights for those who wrestle with Him", "That God turns evil into good", "That Israel must become a people of faith"] },
+    "mt-genesis-49": { a: "The scepter will not depart from Judah — Judah is the royal tribe",
+      w: ["Joseph will receive a double portion as the firstborn", "Levi will rule as the priestly tribe over Israel", "Judah will be scattered among the other tribes"] },
+    "mt-genesis-49-destiny": { a: "The destiny of the 12 tribes of Israel",
+      w: ["The borders of the Promised Land", "The order of Israel's camp in the wilderness", "The line of priests descended from Levi"] },
+    "mt-genesis-50-20": { a: "evil … good",
+      w: ["harm … His glory", "wrong … mercy", "evil … judgment"] },
+    "mt-inspiration-verses": { a: "2 Timothy 3:16–17 and 2 Peter 1:20–21",
+      w: ["2 Timothy 2:15 and Hebrews 4:12", "Psalm 119:105 and Isaiah 40:8", "John 1:1 and Romans 15:4"] },
+
+    // Locations
+    "mt-mount-moriah": { a: "Mount Moriah",
+      w: ["Mount Sinai", "Mount Carmel", "Mount Ararat"] },
+    "mt-peniel": { a: "Face of God",
+      w: ["House of God", "God fights", "God sees"] },
+    "mt-bethel": { a: "The house of God",
+      w: ["The face of God", "The gate of heaven", "God will provide"] },
+    "mt-babylon": { a: "The center and spearhead of corporate evil",
+      w: ["The birthplace of Abraham's family", "The land bridge of the ancient world", "The world's first superpower"] },
+    "mt-plains-moab": { a: "Where Israel camps before entering the Promised Land and Moses gives his final speeches",
+      w: ["Where Lot settled before Sodom was destroyed", "Where Israel received the law after leaving Egypt", "Where Jacob wrestled with God and was renamed"] },
+    "mt-cave-machpelah": { a: "The burial site Abraham bought near Hebron for the patriarchs and their wives",
+      w: ["Where Lot and his daughters hid after Sodom was destroyed", "Where Jacob set up a stone pillar after his dream", "Where Joseph's brothers threw him into a pit"] },
+    "mt-longitudinal-regions": { a: "Coastal plain, hill country, Jordan Rift Valley, Trans-Jordan plateau",
+      w: ["Coastal plain, Negev, Shephelah, Galilee", "Hill country, Jezreel Valley, Dead Sea basin, Golan Heights", "Coastal plain, hill country, Sinai desert, Mesopotamian plain"] },
+    "mt-israel-land-bridge": { a: "It is the land bridge of the ancient world",
+      w: ["It is cut off from the major trade routes", "It is the agricultural center of the ancient world", "It is the political capital of the ancient Near East"] },
+    "mt-benjamin-plateau": { a: "The Central Benjamin Plateau",
+      w: ["The Jezreel Valley", "The Judean hill country", "The Jordan Rift Valley"] },
+
+    // Dates
+    "mt-exodus-date": { a: "1446 BC",
+      w: ["1260 BC", "1876 BC", "966 BC"] },
+    "mt-pentateuch-setting": { a: "Israel needs to cross the Jordan River and go to war",
+      w: ["Israel is enslaved in Egypt and waiting for deliverance", "Israel is in exile in Babylon and longing to return", "Israel has settled the land and is asking for a king"] },
+
+    // Concepts & Terms
+    "mt-corporate-solidarity": { a: "When the one represents the many",
+      w: ["When the many share the blame for one person's sin", "When a whole nation enters a covenant together", "When the people choose a leader to speak for them"] },
+    "mt-ironic-retaliation": { a: "When a person's punishment mirrors the very sin they committed",
+      w: ["When God uses an enemy's plan to bless His people", "When the one represents the many", "When a curse is reversed into a blessing"] },
+    "mt-jedp": { a: "The Pentateuch was combined from multiple authors over a long period of time",
+      w: ["Moses wrote the Pentateuch from four earlier sources he collected", "Joshua wrote the Pentateuch after Moses' death", "The Pentateuch is arranged in four parallel covenant sections"] },
+    "mt-mosaic-authorship": { a: "Moses",
+      w: ["Ezra", "Joshua", "Multiple authors over a long period"] },
+    "mt-evolution-category": { a: "As philosophy and history",
+      w: ["As observable science", "As a theory of biology only", "As a theological doctrine"] },
+    "mt-genesis-genre": { a: "As myth-busting",
+      w: ["As myth", "As miscommunication", "As allegory"] },
+    "mt-creationism": { a: "Genesis 1 describes six literal, 24-hour days",
+      w: ["Each day of Genesis 1 represents a long age", "Genesis 1 is a literary framework, not a sequence", "A long gap exists between Genesis 1:1 and 1:2"] },
+    "mt-authorial-intent": { a: "A text means what its original author intended to communicate",
+      w: ["A text means whatever a reader perceives in it", "A text's meaning is decided by the community that reads it", "A text's meaning changes as later authors quote it"] },
+    "mt-protoevangelium": { a: "The Protoevangelium — the first gospel",
+      w: ["The Shema — the first confession", "The Noetic Covenant — the first promise", "The Toledoth — the first genealogy"] },
+
+    // Name Meanings
+    "mt-adam": { a: "Man — from the Hebrew for ground / red earth",
+      w: ["Living or life", "Father of many", "Breath or vapor"] },
+    "mt-eve": { a: "Living or life",
+      w: ["Mother of nations", "Helper", "Princess"] },
+    "mt-cain": { a: "Acquired or gotten",
+      w: ["Appointed or granted", "Wanderer", "Breath or vapor"] },
+    "mt-seth": { a: "Appointed or granted",
+      w: ["Acquired or gotten", "Breath or vapor", "Rest"] },
+    "mt-methuselah": { a: "When he dies, it will be sent",
+      w: ["He walked with God", "God remembers", "Father of many"] },
+    "mt-noah": { a: "Rest",
+      w: ["Living", "Righteous", "Wanderer"] },
+    "mt-melchizedek-name": { a: "King of righteousness",
+      w: ["King of peace", "Priest of the Most High", "My God is king"] },
+    "mt-abram-abraham": { a: "Abram: exalted father · Abraham: father of many nations",
+      w: ["Abram: father of many nations · Abraham: exalted father", "Abram: friend of God · Abraham: father of the faithful", "Abram: wanderer · Abraham: chosen one"] },
+    "mt-sarah": { a: "Princess",
+      w: ["Laughter", "Beautiful", "Mother of nations"] },
+    "mt-isaac": { a: "He laughs / laughter",
+      w: ["God provides", "Heel grabber", "Son of promise"] },
+    "mt-israel-name": { a: "God fights / God fights for you",
+      w: ["Heel grabber", "Face of God", "Prince of peace"] },
+
+    // Covenants
+    "mt-noahic-covenant": { a: "Worldwide stability",
+      w: ["Land, seed, and blessing", "A royal line through Judah", "Forgiveness of sins"] },
+    "mt-abrahamic-components": { a: "Land, seed, and blessing",
+      w: ["Land, law, and temple", "Seed, priesthood, and kingdom", "Blessing, rest, and stability"] },
+    "mt-abrahamic-unilateral": { a: "Unilateral — it rests on God alone",
+      w: ["Bilateral — both parties must keep it", "Conditional — it depends on Abraham's obedience", "Temporary — it ended when the law was given"] },
+    "mt-abrahamic-sign": { a: "Circumcision",
+      w: ["The rainbow", "The Sabbath", "Animal sacrifice"] },
+    "mt-abrahamic-controls": { a: "The destiny of Israel, and thereby the destiny of the world",
+      w: ["The boundaries of the land of Canaan only", "The order of worship in the tabernacle", "The line of kings descended from Judah"] },
+
+    // Core Values
+    "mt-abraham-core-value": { a: "Faith — trusting God's promises",
+      w: ["Obedience to the law", "Hospitality to strangers", "Wisdom in leadership"] },
+    "mt-isaac-jacob-core-value": { a: "God is with His people and fights for His people",
+      w: ["God turns evil into good", "Israel must become a people of faith", "A king lives and dies for his people"] },
+    "mt-joseph-judah-core-value": { a: "God turns evil into good",
+      w: ["God is with His people and fights for them", "The way between God and man has not been lost", "Israel must become a people of faith"] },
+
+    // Nation Origins
+    "mt-moab-ammon": { a: "The Moabites and the Ammonites",
+      w: ["The Edomites and the Amalekites", "The Ishmaelites and the Midianites", "The Philistines and the Canaanites"] },
+    "mt-edom": { a: "From Esau, Jacob's twin brother",
+      w: ["From Lot's older daughter", "From Ishmael, Abraham's son by Hagar", "From Ham, the son of Noah"] },
+
+    // Structure
+    "mt-six-days": { a: "Days 1–3 form the realms; days 4–6 fill them",
+      w: ["Days 1–3 make the heavens; days 4–6 make the earth", "Days 1–2 form the realms; days 3–6 fill them", "Each day alternates between forming and filling"] },
+    "mt-genesis-structure": { a: "Families / generations",
+      w: ["Covenants", "Geographic locations", "Major sins and judgments"] },
+    "mt-genesis-winnowing": { a: "Its genealogies remove certain families and highlight others",
+      w: ["Its stories shift focus from Israel to all the nations", "Its genealogies show every nation descends equally from Noah", "Its covenants grow stricter with each generation"] },
+    "mt-genesis5-features": { a: "Linear and formulaic, long lives, death",
+      w: ["Branching, short lives, blessing", "Linear and formulaic, kings, wars", "Long lives, covenant promises, sacrifice"] },
+    "mt-genesis5-breaks": { a: "Enoch and Noah",
+      w: ["Adam and Seth", "Enoch and Methuselah", "Seth and Lamech"] },
+
+    // Miscellaneous
+    "mt-ot-languages": { a: "Hebrew and Aramaic",
+      w: ["Hebrew and Greek", "Aramaic and Greek", "Hebrew only"] },
+    "mt-apply-scripture": { a: "Know, worship / awe, respond to God's character, worldview",
+      w: ["Read, memorize, meditate, obey", "Know, obey, teach, evangelize", "Worship, pray, serve, give"] },
+    "mt-satan-genesis3": { a: "He questions and twists God's word, casting doubt on God's goodness",
+      w: ["He forces Eve to eat from the tree", "He openly denies that God exists", "He tempts Adam first while Eve is away"] },
+    "mt-sons-of-god": { a: "Fallen angels",
+      w: ["The godly line of Seth", "Ancient kings and rulers", "Righteous men before the flood"] },
+    "mt-genesis6-2-result": { a: "The Nephilim",
+      w: ["The Tower of Babel", "The curse on Canaan", "The scattering of the nations"] },
+    "mt-noah-drunk": { a: "Sin persists even after the flood, and it sets up the curse on Canaan",
+      w: ["It shows God's judgment on wine and drunkenness", "It marks the end of the Noahic covenant", "It explains why Noah's sons were scattered at Babel"] },
+    "mt-melchizedek-offices": { a: "King and priest",
+      w: ["Prophet and priest", "King and prophet", "Judge and king"] },
+    "mt-terah-son": { a: "Abram (Abraham)",
+      w: ["Nahor", "Haran", "Lot"] },
+    "mt-genesis15-walk": { a: "The covenant is unilateral — it rests entirely on God's faithfulness",
+      w: ["The covenant is bilateral, and Abraham's part came later", "Abraham was considered unclean until he was circumcised", "Only priests were allowed to seal a covenant"] },
+    "mt-sodom-sin": { a: "Homosexuality",
+      w: ["A lack of hospitality", "Idolatry", "Greed"] },
+    "mt-sodom-not-hospitality": { a: "A lack of hospitality",
+      w: ["Homosexuality", "Sexual immorality", "Rebellion against God"] },
+    "mt-royal-tribe": { a: "Judah",
+      w: ["Levi", "Joseph", "Benjamin"] },
+    "mt-flood-global": { a: "Global",
+      w: ["Local", "Regional (the Mesopotamian valley)", "Symbolic, not literal"] },
+    "mt-flood-judgment": { a: "A global judgment, not a local judgment",
+      w: ["A local judgment on Mesopotamia", "A regional judgment on the lands of the Nephilim", "A symbolic judgment, not a historical one"] },
+    "mt-exodus-pharaoh": { a: "Amenhotep II",
+      w: ["Ramesses II", "Thutmose III", "Tutankhamun"] },
+    "mt-jacob-blessed": { a: "God's covenant faithfulness to Abraham and Isaac",
+      w: ["Jacob's cleverness in outwitting others", "Jacob's faithfulness compared to Esau", "Jacob's sacrifice at Bethel"] },
+    "mt-severing-history": { a: "Yes — the Bible's theological claims lose their grounding",
+      w: ["No — its spiritual truths stand apart from history", "No — only the New Testament needs to be historical", "Only for the books of law, not the narratives"] },
+    "mt-ane-gods": { a: "Capricious and violent, creating man as an afterthought or slave labor",
+      w: ["Loving and intentional, creating man for fellowship", "Distant but just, creating man to keep moral order", "Unified as one god, creating man in his own image"] },
+    "mt-creation-man": { a: "Creation was a man-hugger",
+      w: ["Creation was hostile to man", "Creation was indifferent to man", "Creation was cursed for man's sake"] },
+    "mt-realism-authenticity": { a: "authenticity",
+      w: ["inspiration", "history", "wisdom"] },
+    "mt-levirate-marriage": { a: "A sacrificial love",
+      w: ["A legal duty to the family", "Protecting the family's inheritance", "Obedience to the law of Moses"] },
+    "mt-exodus-dynasty": { a: "The 18th Dynasty",
+      w: ["The 19th Dynasty", "The 12th Dynasty", "The 26th Dynasty"] }
+  };
+
   var STORAGE_KEY = "ot-study-cards:known:v1";
   var THEME_KEY = "ot-study-cards:theme:v1";
 
@@ -1562,6 +1873,9 @@
   var quizTyped = "";
   var quizResults = []; // { id, correct }
   var lastQuizScore = { class: null, midterm: null }; // { correct, total }, kept separately per tab
+  var quizFormat = "mc"; // Midterm Review only: "mc" (multiple choice, like the real exam) | "typed"
+  var quizMcOptions = null; // current question's shuffled options: [{ text, correct }]
+  var quizMcPicked = -1; // index into quizMcOptions the user tapped, once revealed
 
   // Suggestion box + hidden admin panel state
   var dbNS = null; // resolved `db` capability namespace, or null if unavailable
@@ -1805,12 +2119,20 @@
     }
   }
 
+  // Multiple choice only applies on the Midterm Review tab, and only to
+  // cards that have options written for them in MC.
+  function isMcQuestion(item) {
+    return scope === "midterm" && quizFormat === "mc" && !!(item && MC[item.id]);
+  }
+
   function startQuiz(pool) {
     quizQueue = pool.slice();
     shuffleArray(quizQueue);
     quizPos = 0;
     quizRevealed = false;
     quizTyped = "";
+    quizMcOptions = null;
+    quizMcPicked = -1;
     quizResults = [];
     quizStage = "question";
     renderCurrentView();
@@ -1876,12 +2198,24 @@
     var startDisabled = count === 0;
 
     var leadBooksPart = books.length > 1 ? "All books are included by default &mdash; narrow to one if you want. " : "";
+    var mcMode = scope === "midterm" && quizFormat === "mc";
+    var leadHowPart = mcMode ?
+      "Tap at least one " + scopeWordLower + " below to build your quiz, then pick the best answer for each question." :
+      "Tap at least one " + scopeWordLower + " below to build your quiz, type each answer from memory, and grade yourself.";
+
+    var formatChips = scope === "midterm" ?
+      '<div class="filter-label">Format</div><div class="chip-row" id="formatChips">' +
+        '<button type="button" class="chip" data-format="mc" aria-pressed="' + (quizFormat === "mc") + '">Multiple choice</button>' +
+        '<button type="button" class="chip" data-format="typed" aria-pressed="' + (quizFormat === "typed") + '">Type answer</button>' +
+      '</div>'
+      : "";
 
     mainEl.innerHTML =
       '<div class="quiz">' +
         '<div class="quiz-setup">' +
           '<h2>' + (scope === "midterm" ? "Midterm practice quiz" : "Practice quiz") + '</h2>' +
-          '<p class="lead">' + leadBooksPart + 'Tap at least one ' + scopeWordLower + ' below to build your quiz, type each answer from memory, and grade yourself.</p>' +
+          '<p class="lead">' + leadBooksPart + leadHowPart + '</p>' +
+          formatChips +
           bookChips +
           chips +
           '<button type="button" class="start-quiz-btn" id="startQuizBtn"' + (startDisabled ? " disabled" : "") + '>' +
@@ -1890,6 +2224,13 @@
           scoreHtml +
         '</div>' +
       '</div>';
+
+    mainEl.querySelectorAll("#formatChips .chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        quizFormat = chip.getAttribute("data-format");
+        renderCurrentView();
+      });
+    });
 
     mainEl.querySelectorAll("#bookChips .chip").forEach(function (chip) {
       chip.addEventListener("click", function () {
@@ -1945,6 +2286,17 @@
     if (yourBlock) yourBlock.focus();
   }
 
+  // Multiple choice grades itself: tapping an option reveals the answer,
+  // and "Next question" records whether the pick was right.
+  function pickMcOption(i) {
+    if (quizRevealed || !quizMcOptions || !quizMcOptions[i]) return;
+    quizMcPicked = i;
+    quizRevealed = true;
+    renderCurrentView();
+    var verdict = document.getElementById("mcVerdict");
+    if (verdict) verdict.focus();
+  }
+
   function gradeQuiz(correct) {
     var item = quizQueue[quizPos];
     quizResults.push({ id: item.id, correct: correct });
@@ -1953,6 +2305,8 @@
     quizPos += 1;
     quizRevealed = false;
     quizTyped = "";
+    quizMcOptions = null;
+    quizMcPicked = -1;
     if (quizPos >= quizQueue.length) {
       lastQuizScore[scope] = {
         correct: quizResults.filter(function (r) { return r.correct; }).length,
@@ -1979,7 +2333,46 @@
           '<div class="top-row"><span class="tag">' + escapeHtml(item.tag) + '</span><span class="idx mono">' + escapeHtml(item.book || "") + (item.book ? " · " : "") + groupWordFor(item.book) + ' ' + escapeHtml(String(item.label || item.week)) + '</span></div>' +
           '<p class="quiz-prompt">' + escapeHtml(item.front) + '</p>';
 
-    if (!quizRevealed) {
+    var mc = isMcQuestion(item);
+    if (mc) {
+      // Shuffle once per question, so re-renders keep the same A–D order.
+      if (!quizMcOptions) {
+        quizMcOptions = [{ text: MC[item.id].a, correct: true }].concat(
+          MC[item.id].w.map(function (t) { return { text: t, correct: false }; })
+        );
+        shuffleArray(quizMcOptions);
+      }
+      html += '<div class="mc-options" role="group" aria-label="Answer choices">' +
+        quizMcOptions.map(function (opt, i) {
+          var cls = "mc-option";
+          if (quizRevealed) {
+            if (opt.correct) cls += " is-correct";
+            else if (i === quizMcPicked) cls += " is-wrong";
+            else cls += " is-dim";
+          }
+          return '<button type="button" class="' + cls + '" data-i="' + i + '"' + (quizRevealed ? " disabled" : "") + '>' +
+            '<span class="mc-letter">' + "ABCD".charAt(i) + '</span>' +
+            '<span class="mc-text">' + escapeHtml(opt.text) + '</span>' +
+          '</button>';
+        }).join("") +
+      '</div>';
+      if (quizRevealed) {
+        var gotIt = quizMcOptions[quizMcPicked] && quizMcOptions[quizMcPicked].correct;
+        html +=
+          '<div class="answer-compare">' +
+            '<div class="mc-verdict ' + (gotIt ? "good" : "bad") + '" id="mcVerdict" tabindex="-1">' +
+              (gotIt ? "&#10003; Correct" : "&#10007; Not quite") +
+            '</div>' +
+            '<div class="answer-block correct">' +
+              '<div class="label">From the card</div>' +
+              item.back.map(function (l) { return '<span class="ref-line">' + escapeHtml(l) + '</span>'; }).join("") +
+            '</div>' +
+          '</div>' +
+          '<div class="quiz-actions-row"><button type="button" class="check-btn" id="mcNextBtn">' +
+            (quizPos + 1 >= quizQueue.length ? "See results" : "Next question") +
+          '</button></div>';
+      }
+    } else if (!quizRevealed) {
       html +=
         '<textarea class="quiz-input" id="quizInput" placeholder="Type your answer&hellip;"></textarea>' +
         '<div class="quiz-actions-row"><button type="button" class="check-btn" id="checkBtn">Check answer</button></div>';
@@ -2004,6 +2397,19 @@
 
     html += '</div></div>';
     mainEl.innerHTML = html;
+
+    if (mc) {
+      if (!quizRevealed) {
+        mainEl.querySelectorAll(".mc-option").forEach(function (btn) {
+          btn.addEventListener("click", function () { pickMcOption(parseInt(btn.getAttribute("data-i"), 10)); });
+        });
+      } else {
+        document.getElementById("mcNextBtn").addEventListener("click", function () {
+          gradeQuiz(!!quizMcOptions[quizMcPicked].correct);
+        });
+      }
+      return;
+    }
 
     var quizInput = document.getElementById("quizInput");
     if (!quizRevealed) {
@@ -2333,6 +2739,18 @@
     if (e.key === "Escape") {
       if (suggestModalOpen) { closeSuggestModal(); return; }
       if (adminModalOpen) { closeAdminModal(); return; }
+    }
+    // Multiple choice on a keyboard: 1–4 or A–D picks, Enter moves on.
+    if (view === "quiz" && quizStage === "question" && quizMcOptions && !suggestModalOpen && !adminModalOpen &&
+        document.activeElement !== searchInput) {
+      var k = e.key.toLowerCase();
+      var idx = "1234".indexOf(k) !== -1 ? "1234".indexOf(k) : "abcd".indexOf(k);
+      if (!quizRevealed && k.length === 1 && idx !== -1) { e.preventDefault(); pickMcOption(idx); return; }
+      if (quizRevealed && e.key === "Enter") {
+        var nextBtn = document.getElementById("mcNextBtn");
+        if (nextBtn) { e.preventDefault(); nextBtn.click(); }
+        return;
+      }
     }
     if (view !== "cards") return;
     if (document.activeElement === searchInput) return;
