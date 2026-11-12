@@ -2748,7 +2748,13 @@
         quizInput.focus();
       }
       quizInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitQuizAnswer(); }
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          // Keep this Enter from also reaching the page-level handler below,
+          // which would grade the just-revealed answer right away.
+          e.stopPropagation();
+          submitQuizAnswer();
+        }
       });
       document.getElementById("checkBtn").addEventListener("click", submitQuizAnswer);
     } else {
@@ -3079,6 +3085,17 @@
         if (nextBtn) { e.preventDefault(); nextBtn.click(); }
         return;
       }
+    }
+    // Typed answers: once the answer is shown, Enter counts it as right and
+    // moves on. A focused button (e.g. "I got it wrong") keeps its own Enter.
+    if (view === "quiz" && quizStage === "question" && !quizMcOptions && quizRevealed && e.key === "Enter" &&
+        !suggestModalOpen && !adminModalOpen && document.activeElement !== searchInput &&
+        !(document.activeElement && document.activeElement.tagName === "BUTTON")) {
+      e.preventDefault();
+      if (e.repeat) return;
+      var rightBtn = document.getElementById("gradeRightBtn");
+      if (rightBtn) rightBtn.click();
+      return;
     }
     if (view !== "cards") return;
     if (document.activeElement === searchInput) return;
